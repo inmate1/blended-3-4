@@ -6,14 +6,16 @@ const getGroupProdacts = async () => {
     const data = await fs.readFile(PATH_TO_DB, "utf-8");
     const products = JSON.parse(data);
 
-    const groupProdactsCategory = products.reduce((acc, prodct) => {
-      return {
-        ...acc,
-        [prodct.category]: [],
-      };
+    const groupProductsCategory = products.reduce((acc, product) => {
+      const { category } = product;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(product);
+      return acc;
     }, {});
 
-    console.log(groupProdactsCategory);
+    console.log(groupProductsCategory);
   } catch (error) {
     console.log(error);
   }

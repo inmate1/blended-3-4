@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { PATH_PRODACTS, PATH_TO_DB } from "../constans/path.js";
+import { PATH_PRODUCTS, PATH_TO_DB } from "../constans/path.js";
 import path from "node:path";
 
 const createProdactFiles = async () => {
@@ -8,7 +8,7 @@ const createProdactFiles = async () => {
     const prodcts = JSON.parse(data);
 
     prodcts.forEach((prodct, index) => {
-      const pathFile = path.join(PATH_PRODACTS, `${index + 1}.json`);
+      const pathFile = path.join(PATH_PRODUCTS, `${index + 1}.json`);
 
       fs.writeFile(pathFile, JSON.stringify(prodct, null, 2));
     });
