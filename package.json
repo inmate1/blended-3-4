@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate": "node src/scripts/generateProducts.js",
-    "get-expensive-products": "node src/scripts/getExpensiveProducts.js"
+    "get-expensive-products": "node src/scripts/getExpensiveProducts.js",
+    "get-total-price": "node src/scripts/getTotalPrice.js"
   },
   "keywords": [],
   "author": "Vladyslav Bihun <bihunvv@gmail.com>",
