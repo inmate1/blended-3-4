@@ -1,6 +1,6 @@
 import { Product } from '../db/models/Product.js';
 
-export const getAllProducts = () => Product.find();
+export const getAllProducts = (userId) => Product.find({ userId });
 
 export const deleteProduct = (productId) =>
   Product.findByIdAndDelete(productId);

@@ -6,7 +6,8 @@ import {
 import createHttpError from 'http-errors';
 
 export const getProductsController = async (req, res) => {
-  const products = await getAllProducts();
+  const products = await getAllProducts(req.user._id);
+
   res.json({
     status: 200,
     message: 'Successfully found products!',
@@ -27,7 +28,7 @@ export const deleteProductController = async (req, res) => {
 };
 
 export const postProductController = async (req, res) => {
-  const product = await postProduct(req.body);
+  const product = await postProduct({ ...req.body, userId: req.user._id });
 
   res.status(201).json({
     status: 201,

@@ -16,3 +16,8 @@ export const setupSession = async (userId) => {
 
   return await Session.create({ userId, ...createNewSession() });
 };
+
+export const findSessionByAccessToken = (accessToken) =>
+  Session.findOne({ accessToken });
+
+export const findUserById = (userId) => User.findById(userId);
