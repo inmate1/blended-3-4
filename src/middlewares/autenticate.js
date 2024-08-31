@@ -1,12 +1,13 @@
 import createHttpError from 'http-errors';
-import { findSessionByAccessToken } from '../services/users.js';
 import { findUserById } from '../services/users.js';
+import jwt from 'jsonwebtoken';
+import { env } from '../utils/env.js';
 
 export const authenticate = async (req, res, next) => {
   const authHeader = req.get('Authorization');
 
   if (!authHeader) {
-    next(createHttpError(401, 'Anouthorized'));
+    next(createHttpError(401, 'Unauthorized'));
     return;
   }
 
@@ -17,23 +18,12 @@ export const authenticate = async (req, res, next) => {
     return;
   }
 
-  const session = await findSessionByAccessToken(token);
+  const { id } = jwt.verify(token, env('JWT_SECRET'));
 
-  if (!session) {
-    next(createHttpError(401, 'Anouthorized'));
-    return;
-  }
+  const user = await findUserById(id);
+  console.log(user);
 
-  const isExpired = Date.now() > session.accessTokenValidUntil;
-
-  if (isExpired) {
-    next(createHttpError(401, 'Token has expired'));
-    return;
-  }
-
-  const user = await findUserById(session.userId);
-
-  if (!user) {
+  if (!user || !user.token || user.token !== token) {
     next(createHttpError(401, 'User not found'));
     return;
   }

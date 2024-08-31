@@ -2,10 +2,10 @@ import createHttpError from 'http-errors';
 import {
   findUserByEmail,
   createUser,
-  setupSession,
+  updateUserWithToken,
+  resetToken,
 } from '../services/users.js';
 import bcrypt from 'bcrypt';
-import { setupCookies } from '../utils/setupCookies.js';
 
 export const userRegisterController = async (req, res, next) => {
   const { email, name } = req.body;
@@ -15,12 +15,11 @@ export const userRegisterController = async (req, res, next) => {
     throw createHttpError(409, 'Email in use');
   }
 
-  await createUser(req.body);
+  const newUser = await createUser(req.body);
 
   res.status(201).json({
-    status: 201,
-    message: 'Successfully registered a user!',
-    data: { name, email },
+    user: { name, email },
+    token: newUser.token,
   });
 };
 
@@ -37,13 +36,17 @@ export const userLoginController = async (req, res, next) => {
     throw createHttpError(401, 'Unauthorized');
   }
 
-  const session = await setupSession(user._id);
-
-  setupCookies(res, session);
+  const updatedUser = await updateUserWithToken(user._id);
 
   res.json({
-    status: 200,
-    message: 'Successfully logged in an user!',
-    data: { accessToken: session.accessToken },
+    user: { name: updatedUser.name, email: updatedUser.email },
+    token: updatedUser.token,
   });
+};
+
+export const logoutController = async (req, res, next) => {
+  const userId = req.user._id;
+  await resetToken(userId);
+
+  res.status(204).end();
 };
