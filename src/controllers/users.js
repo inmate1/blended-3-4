@@ -50,3 +50,10 @@ export const logoutController = async (req, res, next) => {
 
   res.status(204).end();
 };
+
+export const getCurrentUsserController = (req, res, next) => {
+  res.json({
+    name: req.user.name,
+    email: req.user.email,
+  });
+};

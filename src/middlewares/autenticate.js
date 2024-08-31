@@ -21,7 +21,7 @@ export const authenticate = async (req, res, next) => {
   const { id } = jwt.verify(token, env('JWT_SECRET'));
 
   const user = await findUserById(id);
-  console.log(user);
+  // console.log(user);
 
   if (!user || !user.token || user.token !== token) {
     next(createHttpError(401, 'User not found'));

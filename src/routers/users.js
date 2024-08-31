@@ -6,6 +6,7 @@ import {
   logoutController,
   userLoginController,
   userRegisterController,
+  getCurrentUsserController,
 } from '../controllers/users.js';
 import { authenticate } from '../middlewares/autenticate.js';
 
@@ -24,5 +25,11 @@ userRouter.post(
 );
 
 userRouter.post('/logout', authenticate, ctrlWrapper(logoutController));
+
+userRouter.get(
+  '/current',
+  authenticate,
+  ctrlWrapper(getCurrentUsserController),
+);
 
 export default userRouter;
